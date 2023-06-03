@@ -28,23 +28,18 @@ public class PrettyHitboxesConfig implements ConfigData {
 
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
-    @ConfigEntry.Gui.Tooltip
     public Color boundingBoxColor = new Color(255, 255, 255);
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
-    @ConfigEntry.Gui.Tooltip
     public Color dragonPartColor = new Color(0, 255, 0);
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
-    @ConfigEntry.Gui.Tooltip
     public Color eyeHeightColor = new Color(255, 0, 0);
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
-    @ConfigEntry.Gui.Tooltip
     public Color entityRotationVectorColor = new Color(0, 0, 255);
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
-    @ConfigEntry.Gui.Tooltip
     public Color entityTargetedColor = new Color(100, 100, 100);
 
 
