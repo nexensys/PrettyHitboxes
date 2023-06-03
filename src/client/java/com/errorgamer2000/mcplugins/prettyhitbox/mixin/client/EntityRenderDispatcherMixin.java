@@ -8,9 +8,14 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
+import net.minecraft.entity.decoration.ItemFrameEntity;
+import net.minecraft.entity.decoration.painting.PaintingEntity;
+import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -33,7 +38,7 @@ public class EntityRenderDispatcherMixin {
             Entity targetEntity = target.getEntity();
             return targetEntity.getUuid() == entity.getUuid();
         }
-        
+
         return false;
     }
 
@@ -49,22 +54,26 @@ public class EntityRenderDispatcherMixin {
 
         PrettyHitboxesConfig.Color bboxColor = config.boundingBoxColor;
         PrettyHitboxesConfig.Color targetColor = config.entityTargetedColor;
-        if (config.showBoundingBox && !(entity instanceof EnderDragonEntity)) {
-            PrettyHitboxesConfig.Color color = bboxColor;
-            if (config.differentColorWhenTargeted && isTargeted(entity)) color = targetColor;
-            WorldRenderer.drawBox(matrices, vertices, box, clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
-        } else if (config.showBoundingBox && (entity instanceof EnderDragonEntity) && !config.hideBigDragonBox) {
-            EnderDragonPart[] parts = ((EnderDragonEntity) entity).getBodyParts();
-            int partNum = parts.length;
+        if (config.showBoundingBox) {
+            if (!(entity instanceof EnderDragonEntity)) {
+                PrettyHitboxesConfig.Color color = entity instanceof ItemEntity ? config.itemHitboxColor : bboxColor;
+                if (config.differentColorWhenTargeted && isTargeted(entity)) color = targetColor;
+                if (!(entity instanceof ItemEntity && !config.showItemHitboxes) && !(entity instanceof ThrownItemEntity && !config.showThrowableItemHitboxes) && !(entity instanceof BoatEntity && !config.showBoatHitboxes) && !((entity instanceof PaintingEntity && !config.showPaintingHitboxes) || (entity instanceof ItemFrameEntity && !config.showItemFrameHitboxes)))
+                    WorldRenderer.drawBox(matrices, vertices, box, clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
 
-            boolean targeted = false;
-            for (int i = 0; i < partNum && !targeted; ++i) {
-                if (isTargeted(parts[i])) targeted = true;
+            } else if (!config.hideBigDragonBox) {
+                EnderDragonPart[] parts = ((EnderDragonEntity) entity).getBodyParts();
+                int partNum = parts.length;
+
+                boolean targeted = false;
+                for (int i = 0; i < partNum && !targeted; ++i) {
+                    if (isTargeted(parts[i])) targeted = true;
+                }
+
+                PrettyHitboxesConfig.Color color = bboxColor;
+                if (targeted) color = targetColor;
+                WorldRenderer.drawBox(matrices, vertices, box, clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
             }
-
-            PrettyHitboxesConfig.Color color = bboxColor;
-            if (targeted) color = targetColor;
-            WorldRenderer.drawBox(matrices, vertices, box, clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
         }
 
         if (entity instanceof EnderDragonEntity) {
@@ -83,7 +92,8 @@ public class EntityRenderDispatcherMixin {
                 double h = e + MathHelper.lerp((double) tickDelta, enderDragonPart.lastRenderY, enderDragonPart.getY());
                 double i = f + MathHelper.lerp((double) tickDelta, enderDragonPart.lastRenderZ, enderDragonPart.getZ());
                 matrices.translate(g, h, i);
-                if (config.showBoundingBox) WorldRenderer.drawBox(matrices, vertices, enderDragonPart.getBoundingBox().offset(-enderDragonPart.getX(), -enderDragonPart.getY(), -enderDragonPart.getZ()), clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
+                if (config.showBoundingBox)
+                    WorldRenderer.drawBox(matrices, vertices, enderDragonPart.getBoundingBox().offset(-enderDragonPart.getX(), -enderDragonPart.getY(), -enderDragonPart.getZ()), clampedColorValue(color.red, false), clampedColorValue(color.green, false), clampedColorValue(color.blue, false), clampedColorValue(color.alpha, true));
                 matrices.pop();
             }
         }
@@ -98,7 +108,7 @@ public class EntityRenderDispatcherMixin {
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         Matrix3f matrix3f = matrices.peek().getNormalMatrix();
 
-        if (config.showEntityRotationVector) {
+        if (config.showEntityRotationVector && !(entity instanceof ItemEntity && !config.showItemHitboxes) && !(entity instanceof ThrownItemEntity && !config.showThrowableItemHitboxes) && !(entity instanceof BoatEntity && !config.showBoatHitboxes) && !((entity instanceof PaintingEntity && !config.showPaintingHitboxes) || (entity instanceof ItemFrameEntity && !config.showItemFrameHitboxes))) {
             PrettyHitboxesConfig.Color rotationVectorColor = config.entityRotationVectorColor;
             vertices.vertex(matrix4f, 0.0F, entity.getStandingEyeHeight(), 0.0F).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
             vertices.vertex(matrix4f, (float) (vec3d.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d.y * 2.0), (float) (vec3d.z * 2.0)).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();

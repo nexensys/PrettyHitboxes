@@ -25,6 +25,21 @@ public class PrettyHitboxesConfig implements ConfigData {
     @ConfigEntry.Category("Features")
     @ConfigEntry.Gui.Tooltip
     public boolean differentColorWhenTargeted = false;
+    @ConfigEntry.Category("Features")
+    @ConfigEntry.Gui.Tooltip
+    public boolean showItemHitboxes = true;
+    @ConfigEntry.Category("Features")
+    @ConfigEntry.Gui.Tooltip
+    public boolean showItemFrameHitboxes = true;
+    @ConfigEntry.Category("Features")
+    @ConfigEntry.Gui.Tooltip
+    public boolean showPaintingHitboxes = true;
+    @ConfigEntry.Category("Features")
+    @ConfigEntry.Gui.Tooltip
+    public boolean showBoatHitboxes = true;
+    @ConfigEntry.Category("Features")
+    @ConfigEntry.Gui.Tooltip
+    public boolean showThrowableItemHitboxes = true;
 
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
@@ -41,6 +56,9 @@ public class PrettyHitboxesConfig implements ConfigData {
     @ConfigEntry.Category("Colors")
     @ConfigEntry.Gui.CollapsibleObject
     public Color entityTargetedColor = new Color(100, 100, 100);
+    @ConfigEntry.Category("Colors")
+    @ConfigEntry.Gui.CollapsibleObject
+    public Color itemHitboxColor = new Color(255, 255, 255);
 
 
     public static class Color {
