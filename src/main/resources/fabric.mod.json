@@ -3,7 +3,7 @@
 	"id": "pretty-hitboxes",
 	"version": "${version}",
 	"name": "Pretty Hitboxes",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Fully configurable hitbox rendering.",
 	"authors": [
 		"Me!"
 	],
