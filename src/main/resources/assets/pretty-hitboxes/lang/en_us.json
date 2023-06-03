@@ -1,4 +1,5 @@
 {
+  "text.autoconfig.pretty-hitboxes.title": "Pretty Hitboxes",
   "text.autoconfig.pretty-hitboxes.category.Features": "Hitbox Features",
   "text.autoconfig.pretty-hitboxes.category.Colors": "Hitbox Colors",
   "text.autoconfig.pretty-hitboxes.option.hitboxesEnabledByDefault": "Enable Hitboxes by Default",

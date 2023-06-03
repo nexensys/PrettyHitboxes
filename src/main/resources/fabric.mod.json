@@ -5,7 +5,7 @@
 	"name": "Pretty Hitboxes",
 	"description": "Fully configurable hitbox rendering.",
 	"authors": [
-		"Me!"
+		"ErrorGamer2000"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
@@ -33,14 +33,6 @@
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "~1.19.4",
-		"java": ">=17",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	},
-	"custom": {
-		"modmenu": {
-		}
+		"java": ">=17"
 	}
 }
