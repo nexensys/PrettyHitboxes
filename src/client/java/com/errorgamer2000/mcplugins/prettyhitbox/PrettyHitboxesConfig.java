@@ -55,6 +55,7 @@ public class PrettyHitboxesConfig implements ConfigData {
         public int green;
         @ConfigEntry.Gui.Tooltip
         public int blue;
+        @ConfigEntry.Gui.Tooltip
         public int alpha = 100;
     }
 
