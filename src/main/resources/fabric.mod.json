@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "pretty-hitboxes",
-	"version": "${version}",
+	"version": "1.0.0",
 	"name": "Pretty Hitboxes",
 	"description": "Fully configurable hitbox rendering.",
 	"authors": [
