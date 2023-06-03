@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "com.errorgamer2000.mcplugins.prettyhitbox.mixin.client",
+	"compatibilityLevel": "JAVA_17",
+	"client": [
+		"PrettyHitboxesMixin",
+		"EntityRenderDispatcherMixin",
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
