@@ -25,6 +25,10 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityRenderDispatcher.class)
 public class EntityRenderDispatcherMixin {
@@ -46,8 +50,8 @@ public class EntityRenderDispatcherMixin {
      * @author ErrorGamer2000
      * @reason We need to completely redefine how hitboxes are drawn
      */
-    @Overwrite
-    private static void renderHitbox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta) {
+    @Inject(at = @At("HEAD"), method = "renderHitbox(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;Lnet/minecraft/entity/Entity;F)V", cancellable = true)
+    private static void renderHitbox(MatrixStack matrices, VertexConsumer vertices, Entity entity, float tickDelta, CallbackInfo ci) {
         PrettyHitboxesConfig config = AutoConfig.getConfigHolder(PrettyHitboxesConfig.class).getConfig();
 
         Box box = entity.getBoundingBox().offset(-entity.getX(), -entity.getY(), -entity.getZ());
@@ -113,5 +117,7 @@ public class EntityRenderDispatcherMixin {
             vertices.vertex(matrix4f, 0.0F, entity.getStandingEyeHeight(), 0.0F).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
             vertices.vertex(matrix4f, (float) (vec3d.x * 2.0), (float) ((double) entity.getStandingEyeHeight() + vec3d.y * 2.0), (float) (vec3d.z * 2.0)).color(Math.min(255, Math.max(0, rotationVectorColor.red)), Math.min(255, Math.max(0, rotationVectorColor.green)), Math.min(255, Math.max(0, rotationVectorColor.blue)), Math.min(255, Math.max(0, (rotationVectorColor.alpha * 255) / 100))).normal(matrix3f, (float) vec3d.x, (float) vec3d.y, (float) vec3d.z).next();
         }
+
+        ci.cancel();
     }
 }
